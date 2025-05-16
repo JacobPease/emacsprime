@@ -29,11 +29,11 @@
 	   (mode-line-padding 10)
 
 	   ;; Hand picked Deus-Ex: Human Revolution Colors
-	   (bg "#0c0c0c")
-	   (fg "#dedede")
-	   (fg-bold "#ffffff")
+	   (bg "#101010")
+	   (fg "#c9c9c9")
+	   (fg-bold "#e7e7e7")
 	   (black "#272828")
-	   (black-bold "#57431e")
+	   (black-bold "#444444")
 	   (red "#c72f16")
 	   (red-bold "ff5031")
 	   (green "#b1a607")
@@ -47,6 +47,7 @@
 	   (cyan "#6aa666")
 	   (cyan-bold "#7cfeb2")
 
+	   ;; Some more yellows
 	   (yellow-0 "#58431d")
 	   (yellow-1 "#6d4f1d")
 	   (yellow-2 "#855e1a")
@@ -54,7 +55,11 @@
 	   (yellow-4 "#b57a10")
 	   (yellow-5 "#cb8b12")
 	   (yellow-6 "#e29c12")
-	   (yellow-7 "#f8ac12"))
+	   (yellow-7 "#f8ac12")
+
+	   ;; Extra colors
+	   (comment-color "#686868")
+	   (link-bg "#40643e"))
 
   ;; BODY of Let statement
   (custom-theme-set-faces
@@ -68,43 +73,138 @@
    `(success ((,class (:foreground ,green-bold))))
    `(fringe ((,class (:inherit default :foreground ,fg))))
    `(region ((,class (:background ,magenta :foreground ,yellow :distant-foreground ,yellow))))
-   `(highlight ((,class (:background ,blue :foreground ,fg :distant-foreground ,fg))))
+   `(highlight ((,class (:background ,link-bg :foreground ,cyan-bold :distant-foreground ,fg))))
    `(lazy-highlight ((,class (:inherit highlight))))
    `(cursor ((,class (:background ,yellow))))
+   `(shadow ((,class (:foreground ,black))))
+   `(minibuffer-prompt ((,class (:foreground ,fg))))
+   `(tooltip ((,class (:background ,black-bold :foreground ,fg-bold))))
+   `(secondary-selection ((,class (:background ,fg-bold))))
+   `(fill-column-indicator ((,class (:foreground ,yellow-2))))
+   `(match ((,class (:foreground ,green :weight bold))))
+   `(trailing-whitespace ((,class (:background ,red))))
+   `(nobreak-space ((,class (:inherit default :underline t))))
+   `(nobreak-hyphen ((,class (:inherit nobreak-space))))
    `(vertical-border ((,class (:background ,bg :foreground ,bg))))
-   `(link ((,class (:foreground ,blue :underline t :weight bold))))
+   `(link ((,class (:foreground ,cyan :underline t :weight bold))))
+   `(link-visited ((,class (:foreground ,yellow-3 :underline t :weight bold))))
+   `(escape-glyph ((,class (:foreground ,red-bold))))
+   `(homoglyph ((,class (:inherit escape-glyph))))
+   `(widget-single-line-field ((,class (:background ,black-bold))))
+   `(widget-field ((,class (:inherit widget-single-line-field :extend t))))
    
     ;; Font-lock stuff. This is how syntax highlighting is described.
    `(font-lock-builtin-face ((,class (:foreground ,yellow))))
-   `(font-lock-doc-face ((,class (:foreground ,magenta-bold))))
-   `(font-lock-comment-face ((,class (:foreground ,magenta-bold))))
+   `(font-lock-doc-face ((,class (:foreground ,green))))
+   `(font-lock-comment-face ((,class (:foreground ,comment-color))))
    `(font-lock-comment-delimiter-face ((,class (:inherit font-lock-comment-face))))
    `(font-lock-delimiter-face ((,class (:foreground ,fg))))
-   `(font-lock-constant-face ((,class (:foreground ,blue))))
+   `(font-lock-constant-face ((,class (:foreground ,cyan))))
    `(font-lock-variable-name-face ((,class ())))
-   `(font-lock-function-name-face ((,class ())))
+   `(font-lock-function-name-face ((,class (:foreground ,fg))))
    `(font-lock-keyword-face ((,class (:foreground ,yellow :weight bold))))
    `(font-lock-type-face ((,class (:foreground ,fg-bold :weight bold))))
    `(font-lock-string-face ((,class (:foreground ,green))))
    `(font-lock-warning-face ((,class (:inherit warning))))
-   `(font-lock-preprocessor-face ((,class (:foreground ,green))))
+   `(font-lock-preprocessor-face ((,class (:foreground ,green :weight bold :slant italic))))
    `(font-lock-negation-char-face ((,class (::weight bold))))
    `(font-lock-regexp-grouping-backslash ((,class (:foreground ,cyan :weight bold))))
    `(font-lock-regexp-grouping-construct ((,class (:foreground ,cyan :weight bold))))
 
    ;; mode-line/header-line
-   `(mode-line ((,class (:background ,yellow-6 :foreground ,bg :weight bold :box (:line-width ,mode-line-padding :color ,yellow-6)))))
-   `(mode-line-inactive ((,class (:background ,yellow-1 :foreground ,bg :box (:line-width ,mode-line-padding :color ,yellow-1)))))
+   `(mode-line ((,class (:background ,yellow-0 :foreground ,yellow-bold :weight bold :box (:line-width ,mode-line-padding :color ,yellow-0)))))
+   `(mode-line-inactive ((,class (:background ,black :foreground ,black-bold :box (:line-width ,mode-line-padding :color ,black)))))
    `(mode-line-emphasis ((,class (:foreground ,blue))))
    `(mode-line-highlight ((,class (:foreground ,fg))))
-   ;;`(mode-line-buffer-id ((,class (:foreground ,base-8 :weight bold))))
-   ;;`(header-line ((,class (:inherit mode-line-inactive :foreground ,base-7))))
+   `(mode-line-buffer-id ((,class (:foreground ,fg-bold :weight bold))))
+   `(header-line ((,class (:inherit mode-line-inactive :foreground ,fg))))
    ;;`(deux-ex-mode-line-fringe ((,class (:background ,bg :foreground ,bg :inherit nil))))
 
+   ;; ---------------------------------- ;;
+   ;; Internal/built-in packages
+   ;; ---------------------------------- ;;
+   
    ;; window-divider
    `(window-divider ((,class (:inherit vertical-border))))
    `(window-divider-first-pixel ((,class (:inherit window-divider))))
    `(window-divider-last-pixel ((,class (:inherit window-divider))))
+
+    ;; dired
+   `(dired-directory ((,class (:foreground ,yellow))))
+   `(dired-ignored ((,class (:foreground ,black-bold))))
+   `(dired-flagged ((,class (:foreground ,red))))
+   `(dired-header ((,class (:foreground ,blue :weight bold))))
+   `(dired-mark ((,class (:foreground ,yellow :weight bold))))
+   `(dired-marked ((,class (:foreground ,magenta :weight bold))))
+   `(dired-perm-write ((,class (:foreground ,fg :underline t))))
+   `(dired-symlink ((,class (:foreground ,cyan :weight bold))))
+   `(dired-warning ((,class (:foreground ,yellow-bold))))
+
+   ;; ido
+   `(ido-only-match ((,class (:inherit success))))
+   `(ido-first-match ((,class (:foreground ,yellow :weight bold :underline t))))
+   `(ido-indicator ((,class (:background ,bg :foreground ,red))))
+   `(ido-subdir ((,class (:inherit dired-directory))))
+   `(ido-virtual ((,class (:foreground ,black-bold))))
+
+   ;; line-number
+   `(line-number ((,class (:inherit default :foreground ,black-bold))))
+   `(line-number-current-line ((,class (:inherit (hl-line default) :foreground "#686868"))))
+
+   ;; show-paren
+   `(show-paren-match ((,class (:background ,black-bold :foreground ,cyan-bold :weight ultra-bold))))
+   `(show-paren-mismatch ((,class (:foreground ,red :weight ultra-bold))))
+   
+   ;; custom
+   `(custom-button ((,class (:background ,black-bold :foreground ,fg :box (:line-width 3 :color ,black-bold)))))
+
+   ;; org
+   `(org-hide ((,class (:foreground ,comment-color))))
+   `(org-level-1 ((,class (:foreground ,fg-bold :weight bold))))
+   `(org-level-2 ((,class (:foreground ,fg-bold :weight bold))))
+   `(org-level-3 ((,class (:foreground ,fg-bold :weight bold))))
+   `(org-level-4 ((,class (:foreground ,fg-bold :weight bold))))
+   `(org-level-5 ((,class (:foreground ,fg-bold :weight bold))))
+   `(org-level-6 ((,class (:foreground ,fg-bold :weight bold))))
+   `(org-level-7 ((,class (:foreground ,fg-bold :weight bold))))
+   `(org-level-8 ((,class (:foreground ,fg-bold :weight bold))))
+   ;; `(org-special-keyword)
+   `(org-drawer ((,class (:foreground ,yellow :weight bold))))
+   ;; `(org-column)
+   ;; `(org-column-title)
+   ;; `(org-warning)
+   ;; `(org-archived)
+   `(org-link ((,class (:foreground ,cyan :weight bold :uderline t))))
+   `(org-footnote ((,class (:foreground ,yellow :weight bold))))
+   ;; `(org-ellipsis)
+   `(org-date ((,class (:foreground ,cyan))))
+   ;; `(org-sexp-date)
+   ;; `(org-tag)
+   ;; `(org-list-dt)
+   `(org-todo ((,class (:foreground ,yellow :weight bold))))
+   `(org-done ((,class (:foreground ,green-bold :weight bold))))
+   ;;`(org-agenda-done)
+   `(org-headline-done ((,class (:foreground ,green))))
+   `(org-table ((,class (:foreground ,yellow))))
+   `(org-block ((,class (:foreground ,fg))))
+   ;; `(org-block-begin-line)
+   ;; `(org-block-end-line)
+   ;; `(org-formula)
+   `(org-document-title ((,class (:foreground ,yellow :weight bold))))
+   `(org-document-info ((,class (:foreground ,comment-color))))
+   `(org-document-info-keyword ((,class (:foreground ,comment-color))))
+   `(org-verbatim ((,class (:foreground ,comment-color))))
+   `(org-code ((,class (:foreground ,comment-color))))
+   ;; `(org-agenda-structure)
+   ;; `(org-agenda-date-today)
+   ;; `(org-scheduled)
+   ;; `(org-scheduled-today)
+   ;; `(org-scheduled-previously)
+   ;; `(org-upcoming-deadline)
+   ;; `(org-deadline-announce)
+   ;; `(org-time-grid)
+   ;; `(org-latex-and-related)
+   
    ))
 
 ;; Set fringe width and mode line padding
@@ -128,8 +228,7 @@
 (add-hook 'enable-theme-functions
           (lambda (theme)
             (when (eq theme 'deus-ex)
-              (deus-ex-theme-set-fringe)
-              (deus-ex-mode-line-fringe)))
+              (deus-ex-theme-set-fringe)))
           t) ;; Append to hook to run after other hooks
 
 

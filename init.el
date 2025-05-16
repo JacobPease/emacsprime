@@ -18,6 +18,14 @@
 (menu-bar-mode 0)
 (blink-cursor-mode 1)
 
+(require 'package)
+(require 'use-package)
+
+;; MAC Assign Command as Meta key
+(when (eq system-type 'darwin) ;; mac specific settings
+  (setq mac-option-modifier 'alt)
+  (setq mac-command-modifier 'meta)
+  )
 
 (global-set-key (kbd "C-<backspace>") 'delete-forward-char)
 
@@ -46,6 +54,77 @@
 
 ;; (message "%s " package--initialized)
 
+;; ---------------------------------- ;;
+;; display-line-numbers
+;; ---------------------------------- ;;
+
+;; (defmacro editor-feature (name docstring &rest args)
+;;   "Apply NAME and ARGS to `use-package' with `:ensure' defaulted to nil.
+;; DOCSTRING is an optional form that is discarded upon expansion."
+;;   (declare (doc-string 2)
+;;            (indent defun))
+;;   (ignore docstring)
+;;   `(use-package ,name :ensure nil ,@args))
+
+;; (editor-feature display-line-numbers
+;;   "Displays the absolute number of each line in a buffer."
+;;   :custom
+;;   (display-line-numbers-grow-only t "Do not decrease the width of the line number column after it has grown")
+;;   (display-line-numbers-width-start 100 "Count number of lines (+100) in buffer for initial line number width")
+;;   :hook
+;;   (prog-mode-hook . (lambda ()
+;;                       (unless (derived-mode-p 'lisp-interaction-mode)
+;;                         (display-line-numbers-mode))))
+;;   :bind
+;;   ("C-c n" . display-line-numbers-mode))
+
+
+;; -------------------------------------------------------------------
+;; Display Line Numbers
+;; -------------------------------------------------------------------
+
+(use-package display-line-numbers
+  :ensure nil
+  :custom
+  (display-line-numbers-grow-only t "Do not decrease the width of the line number column after it has grown")
+  (display-line-numbers-width-start 100 "Count number of lines (+100) in buffer for initial line number width")
+  :hook
+  (prog-mode-hook . (lambda ()
+                      (unless (derived-mode-p 'lisp-interaction-mode)
+                        (display-line-numbers-mode)))))
+
+;; Modes that are exempt from displaying line-numbers but, in general
+;; I prefer them.
+(defcustom display-line-numbers-exempt-modes
+  '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode)
+  "Major modes on which to disable line numbers."
+  :group 'display-line-numbers
+  :type 'list
+  :version "green")
+
+;; 
+(defun display-line-numbers--turn-on ()
+  "Turn on line numbers except for certain major modes.
+Exempt major modes are defined in `display-line-numbers-exempt-modes'."
+  (unless (or (minibufferp)
+              (member major-mode display-line-numbers-exempt-modes))
+    (display-line-numbers-mode)))
+
+(global-display-line-numbers-mode)
+
+;; -------------------------------------------------------------------
+;; Eglot
+;; -------------------------------------------------------------------
+
+(use-package eglot
+  :ensure nil)
+  
+
+;; -------------------------------------------------------------------
+;; Load Deus Ex: Human Revolution theme
+;; -------------------------------------------------------------------
+
 (require 'deus-ex-theme)
 (load-theme 'deus-ex t)
+
 ;;; init.el ends here
