@@ -3,6 +3,8 @@ Emacs prime is a silly name for this repo so I may change it later. I believe th
 
 Also, I'm a fan of Deus Ex: Human Revolution's gold color scheme. There are not many themes that replicate this look, so I color picked a color scheme straight from the game. The theme is a work-in-progress and not all modes and features have been customized.
 
+![Emacs Prime Screenshot](example.png)
+
 Many parts of this configuration have been borrowed from Jessie Hildebrandt's dt-emacs configuration here: https://gitlab.com/jessieh/dot-emacs
 
 The theme also borrows elements of Jessie Hildebrandt's Adwaita Dark theme: https://gitlab.com/jessieh/adwaita-dark-theme
