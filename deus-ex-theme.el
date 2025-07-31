@@ -35,7 +35,7 @@
 	   (black "#272828")
 	   (black-bold "#444444")
 	   (red "#c72f16")
-	   (red-bold "ff5031")
+	   (red-bold "#ff5031")
 	   (green "#b1a607")
 	   (green-bold "#dbea4f")
 	   (yellow "#f8ac16")
@@ -59,7 +59,8 @@
 
 	   ;; Extra colors
 	   (comment-color "#686868")
-	   (link-bg "#40643e"))
+	   (link-bg "#40643e")
+	   (doc-face-color "#aaa579"))
 
   ;; BODY of Let statement
   (custom-theme-set-faces
@@ -95,7 +96,7 @@
    
     ;; Font-lock stuff. This is how syntax highlighting is described.
    `(font-lock-builtin-face ((,class (:foreground ,yellow))))
-   `(font-lock-doc-face ((,class (:foreground ,green))))
+   `(font-lock-doc-face ((,class (:foreground ,doc-face-color))))
    `(font-lock-comment-face ((,class (:foreground ,comment-color))))
    `(font-lock-comment-delimiter-face ((,class (:inherit font-lock-comment-face))))
    `(font-lock-delimiter-face ((,class (:foreground ,fg))))
@@ -236,6 +237,46 @@
    ;; (set-face-attribute 'verilog-ts-font-lock-direction-face nil         :foreground "RosyBrown3")
    ;; (set-face-attribute 'verilog-ts-font-lock-translate-off-face nil     :background "gray20" :slant 'italic)
    ;; (set-face-attribute 'verilog-ts-font-lock-attribute-face nil         :foreground "orange1")
+
+   ;; completions
+   `(completions-common-part ((,class (:foreground ,yellow :weight bold))))
+   `(completions-annotations ((,class (:background ,yellow-4))))
+   
+   ;; corfu
+   `(corfu-default ((,class (:background ,bg :foreground ,fg))))
+   `(corfu-current ((,class (:background ,black-bold))))
+   `(corfu-bar ((,class (:background ,yellow-7))))
+   `(corfu-border ((,class (:background ,yellow-7))))
+   `(corfu-echo ((,class (:inherit font-lock-doc-face))))
+   `(corfu-popupinfo ((,class (:inherit corfu-default))))
+
+   ;; markdown
+   `(markdown-header-face-1 ((,class (:foreground ,yellow :weight bold))))
+   `(markdown-header-face-2 ((,class (:inherit markdown-header-face-1))))
+   `(markdown-header-face-3 ((,class (:inherit markdown-header-face-1))))
+   `(markdown-header-face-4 ((,class (:inherit markdown-header-face-1))))
+   `(markdown-header-face-5 ((,class (:inherit markdown-header-face-1))))
+   `(markdown-header-delimiter-face ((,class (:foreground ,yellow :weight bold))))
+   `(markdown-markup-face ((,class (:foreground ,fg-bold :weight bold))))
+   `(markdown-language-keyword-face ((,class (:foreground ,fg-bold :weight bold))))
+   `(markdown-code-face ((,class (:foreground ,green-bold))))
+
+   ;; treemacs
+   `(treemacs-root-face ((,class (:foreground ,yellow-bold :weight bold :underline t))))
+   `(treemacs-directory-face ((,class (:foreground ,yellow))))
+
+   ;; neotree
+   `(neo-root-dir-face ((,class (:foreground ,yellow :weight bold :underline t))))
+   `(neo-dir-link-face ((,class (:foreground ,fg-bold :weight bold))))
+   `(neo-vc-edited-face ((,class (:foreground ,red))))
+   `(neo-file-link-face ((,class (:foreground ,fg))))
+
+   ;; makefile
+   `(makefile-targets ((,class (:foreground ,yellow :weight bold))))
+   
+   ;; all-the-icons
+   ;; `(all-the-icons-octicon ((,class (:foreground ,yellow))))
+   `(all-the-icons-dir-face ((,class (:foreground ,yellow))))
    
    ))
 
