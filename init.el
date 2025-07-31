@@ -42,6 +42,14 @@
   (package-install 'all-the-icons)
   (all-the-icons-install-fonts))
 
+(setq initial-scratch-message nil)
+(setq inhibit-startup-echo-area-message t)
+
+;; Set monospace font
+(when (member "Roboto Mono" (font-family-list))
+  (set-frame-font "Roboto Mono-12" nil t))
+
+
 ;; -------------------------------------------------------------------
 ;; Assign shortcut keys
 ;; -------------------------------------------------------------------
@@ -148,7 +156,8 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
         (append treesit-language-source-alist
                 '((c "https://github.com/tree-sitter/tree-sitter-c")
                   (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
-                  (verilog "https://github.com/gmlarumbe/tree-sitter-systemverilog"))))
+                  (verilog "https://github.com/tree-sitter/tree-sitter-verilog")
+                  (systemverilog "https://github.com/gmlarumbe/tree-sitter-systemverilog"))))
   ;; Install all grammars
   (mapc (lambda (lang)
           (unless (treesit-language-available-p (car lang))
