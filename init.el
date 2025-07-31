@@ -37,6 +37,11 @@
 ;; Enable truncation of lines instead of word wrapping for programming modes
 (add-hook 'prog-mode-hook (lambda () (setq truncate-lines t)))
 
+;; Install all-the-icons for professional looking icons
+(unless (package-installed-p 'all-the-icons)
+  (package-install 'all-the-icons)
+  (all-the-icons-install-fonts))
+
 ;; -------------------------------------------------------------------
 ;; Assign shortcut keys
 ;; -------------------------------------------------------------------
@@ -131,6 +136,34 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
 (global-display-line-numbers-mode)
 
 ;; -------------------------------------------------------------------
+;; Treesitter
+;; -------------------------------------------------------------------
+
+;; Main treesitter package
+(use-package treesit
+  :ensure nil
+  :config
+  ;; Set up Tree-sitter language sources
+  (setq treesit-language-source-alist
+        (append treesit-language-source-alist
+                '((c "https://github.com/tree-sitter/tree-sitter-c")
+                  (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+                  (verilog "https://github.com/gmlarumbe/tree-sitter-systemverilog"))))
+  ;; Install all grammars
+  (mapc (lambda (lang)
+          (unless (treesit-language-available-p (car lang))
+            (treesit-install-language-grammar (car lang))))
+        treesit-language-source-alist)
+  ;; Associate .sv files with verilog-ts-mode
+  (add-to-list 'auto-mode-alist '("\\.sv\\'" . verilog-ts-mode)))
+
+;; Automatically use treesit modes when available
+(use-package treesit-auto
+  :ensure t
+  :config
+  (global-treesit-auto-mode))
+
+;; -------------------------------------------------------------------
 ;; verilog-ts-mode
 ;; -------------------------------------------------------------------
 
@@ -192,34 +225,6 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
   ("\\.gitmodules\\'" . gitconfig-mode)
   ("\\.gitattributes\\'" . gitattributes-mode)
   )
-
-;; -------------------------------------------------------------------
-;; Treesitter
-;; -------------------------------------------------------------------
-
-;; Main treesitter package
-(use-package treesit
-  :ensure nil
-  :config
-  ;; Set up Tree-sitter language sources
-  (setq treesit-language-source-alist
-        (append treesit-language-source-alist
-                '((c "https://github.com/tree-sitter/tree-sitter-c")
-                  (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
-                  (verilog "https://github.com/gmlarumbe/tree-sitter-systemverilog"))))
-  ;; Install all grammars
-  (mapc (lambda (lang)
-          (unless (treesit-language-available-p (car lang))
-            (treesit-install-language-grammar (car lang))))
-        treesit-language-source-alist)
-  ;; Associate .sv files with verilog-ts-mode
-  (add-to-list 'auto-mode-alist '("\\.sv\\'" . verilog-ts-mode)))
-
-;; Automatically use treesit modes when available
-(use-package treesit-auto
-  :ensure t
-  :config
-  (global-treesit-auto-mode))
 
 ;; -------------------------------------------------------------------
 ;; Eglot
