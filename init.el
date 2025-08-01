@@ -46,8 +46,8 @@
 (setq inhibit-startup-echo-area-message t)
 
 ;; Set monospace font
-(when (member "Roboto Mono" (font-family-list))
-  (set-frame-font "Roboto Mono-12" nil t))
+(when (member "Lekton" (font-family-list))
+  (set-frame-font "Lekton-14" nil t))
 
 
 ;; -------------------------------------------------------------------
@@ -74,6 +74,10 @@
 (global-set-key (kbd "C-}") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-{") 'shrink-window-horizontally)
 (global-set-key (kbd "C-^") 'enlarge-window)
+
+;; Fill-paragraph binding. Keeps comments commented when filling in
+;; verilog-mode.
+(global-set-key (kbd "C-c v p") 'fill-paragraph)
 
 ;; -------------------------------------------------------------------
 ;; ido
