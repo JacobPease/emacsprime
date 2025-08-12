@@ -93,6 +93,7 @@
    `(homoglyph ((,class (:inherit escape-glyph))))
    `(widget-single-line-field ((,class (:background ,black-bold))))
    `(widget-field ((,class (:inherit widget-single-line-field :extend t))))
+   ;;`(variable-pitch ((,class ()))
    
     ;; Font-lock stuff. This is how syntax highlighting is described.
    `(font-lock-builtin-face ((,class (:foreground ,yellow))))

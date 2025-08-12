@@ -32,7 +32,7 @@
 (setq-default line-spacing 0.2)
 
 ;; Tab width
-(setq-default tab-width 4)
+(setq-default tab-width 3)
 
 ;; Enable truncation of lines instead of word wrapping for programming modes
 (add-hook 'prog-mode-hook (lambda () (setq truncate-lines t)))
@@ -46,8 +46,8 @@
 (setq inhibit-startup-echo-area-message t)
 
 ;; Set monospace font
-(when (member "Lekton" (font-family-list))
-  (set-frame-font "Lekton-14" nil t))
+(when (member "Ubuntu Mono" (font-family-list))
+  (set-frame-font "Ubuntu Mono-14" nil t))
 
 
 ;; -------------------------------------------------------------------
@@ -181,7 +181,7 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
 ;; -------------------------------------------------------------------
 
 ;; Define a custom variable for Verilog indentation
-(defcustom my-verilog-indent-level 4
+(defcustom my-verilog-indent-level 3
   "Indentation level for Verilog and SystemVerilog modes."
   :type 'integer
   :group 'verilog-mode
@@ -192,6 +192,7 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
   :hook
   (verilog-ts-mode . (lambda ()
                        (setq verilog-indent-level my-verilog-indent-level)
+							  (setq verilog-ts-indent-level my-verilog-indent-level)
                        (setq verilog-indent-level-declaration my-verilog-indent-level)
                        (setq verilog-indent-level-module my-verilog-indent-level)
                        (setq verilog-indent-level-behavioral my-verilog-indent-level)
@@ -199,6 +200,12 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
                        (setq tab-always-indent t)))   ; Ensure TAB reindents
   :custom
   (verilog-auto-newline nil))  ; Disable auto-newline after semicolon
+
+(defun align-verilog-case-state ()
+  (interactive)
+  (align-regexp (region-beginning) (region-end) ":\\s-+" 1 1 nil))
+
+(global-set-key (kbd "C-c v a") `align-verilog-case-state)
 
 ;; -------------------------------------------------------------------
 ;; c-ts-mode
