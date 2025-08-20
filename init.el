@@ -49,6 +49,12 @@
 (when (member "Ubuntu Mono" (font-family-list))
   (set-frame-font "Ubuntu Mono-14" nil t))
 
+;; -------------------------------------------------------------------
+;; Default values
+;; -------------------------------------------------------------------
+
+;; Set fill-column to be wider, aligning with modern standards, like PEP8 
+(setq fill-column 80)
 
 ;; -------------------------------------------------------------------
 ;; Assign shortcut keys
@@ -78,6 +84,17 @@
 ;; Fill-paragraph binding. Keeps comments commented when filling in
 ;; verilog-mode.
 (global-set-key (kbd "C-c v p") 'fill-paragraph)
+
+;; Useful for horizontal borders I like adding to code.
+(defun fill-with-char-to-column (char)
+  "Prompt for a character and add it from point to the fill column."
+  (interactive "cCharacter to fill with: ")
+  (let ((current-column (current-column))
+        (fill-column fill-column))
+    (when (< current-column fill-column)
+      (insert (make-string (- fill-column current-column) char)))))
+
+(global-set-key (kbd "C-c f") 'fill-with-char-to-column)
 
 ;; -------------------------------------------------------------------
 ;; ido
@@ -196,6 +213,7 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
                        (setq verilog-indent-level-declaration my-verilog-indent-level)
                        (setq verilog-indent-level-module my-verilog-indent-level)
                        (setq verilog-indent-level-behavioral my-verilog-indent-level)
+							  (setq verilog-auto-endcomments nil)
                        (setq indent-tabs-mode nil)    ; Use spaces, not tabs
                        (setq tab-always-indent t)))   ; Ensure TAB reindents
   :custom
