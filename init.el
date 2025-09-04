@@ -132,6 +132,21 @@
 (straight-use-package 'use-package)
 
 ;; -------------------------------------------------------------------
+;; Multiple Cursors
+;; -------------------------------------------------------------------
+
+(use-package multiple-cursors
+  :bind (("C-z p" . mc/mark-previous-like-this)
+         ("C-d" . mc/mark-next-like-this)
+         ("C-z a" . mc/mark-all-like-this)
+         ("<ESC> <ESC>" . mc/keyboard-quit))
+  :ensure t)
+
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+
+(global-set-key (kbd "C-<backspace>") 'delete-forward-char)
+
+;; -------------------------------------------------------------------
 ;; Display Line Numbers
 ;; -------------------------------------------------------------------
 
