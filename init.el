@@ -7,8 +7,9 @@
 (add-to-list 'load-path (file-name-directory (or load-file-name (buffer-file-name))))
 
 (require 'package)
+(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-;;(package-refresh-contents)
+;; (package-refresh-contents)
 (package-initialize)
 
 ;; -------------------------------------------------------------------
@@ -240,6 +241,14 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
 
 (global-set-key (kbd "C-c v a") `align-verilog-case-state)
 
+;; This is needed for tempel templates. Verilog-ts-mode does not
+;; inherit the indentation function by default, thus breaking
+;; indentation in templates. With this, indent-according-to-mode can
+;; now indent properly
+(add-hook 'verilog-ts-mode-hook
+          (lambda ()
+            (setq-local indent-line-function #'verilog-indent-line)))
+
 ;; -------------------------------------------------------------------
 ;; c-ts-mode
 ;; -------------------------------------------------------------------
@@ -303,38 +312,6 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
   :ensure nil
   :hook
   (prog-mode-hook . flymake-mode))
-
-;; -------------------------------------------------------------------
-;; Corfu
-;; -------------------------------------------------------------------
-
-(use-package corfu
-  :ensure t
-  :init
-  (global-corfu-mode)
-  :config
-  (corfu-popupinfo-mode)
-  :custom
-  ;; Auto mode is incredible. Keeping it.
-  (corfu-auto t)
-  (corfu-auto-delay 0.0)
-  (corfu-min-width 20)
-  (corfu-max-width 50)
-  (corfu-preview-current nil)
-  (corfu-popupinfo-delay '(0.4 . 0.2))
-  (corfu-popupinfo-max-width 70)
-  (corfu-popupinfo-min-height 4)
-  (corfu-echo-documentation nil)
-  :bind
-  ;; Key-binding for completion-at-point
-  ;; (:map corfu-mode-map
-  ;; 		("C-<tab>" . completion-at-point)
-  ;;       ;; Optionally unbind M-TAB to avoid conflicts
-  ;;       ("M-<tab>" . nil))
-  (:map corfu-popupinfo-map
-		("M-n" . corfu-popupinfo-scroll-up)
-		("M-p" . corfu-popupinfo-scroll-down))
-  )
 
 ;; -------------------------------------------------------------------
 ;; Python
@@ -509,6 +486,134 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
         ("C-c n" . (lambda () (interactive) nil))))
 
 (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+
+;; -------------------------------------------------------------------
+;; Corfu
+;; -------------------------------------------------------------------
+
+(use-package corfu
+  :ensure t
+  :init
+  (global-corfu-mode)
+  :config
+  (corfu-popupinfo-mode)
+  :custom
+  ;; Auto mode is incredible. Keeping it.
+  (corfu-auto t)
+  (corfu-auto-delay 0.0)
+  (corfu-min-width 20)
+  (corfu-max-width 50)
+  (corfu-preview-current nil)
+  (corfu-popupinfo-delay '(0.4 . 0.2))
+  (corfu-popupinfo-max-width 70)
+  (corfu-popupinfo-min-height 4)
+  (corfu-echo-documentation nil)
+  :bind
+  ;; Key-binding for completion-at-point
+  ;;(:map corfu-mode-map
+		;;("C-<tab>" . completion-at-point)
+  ;;       ;; Optionally unbind M-TAB to avoid conflicts
+  ;;       ("M-<tab>" . nil))
+  ;; (:map corfu-map
+  ;; 		  ("<tab>" . corfu-next)
+  ;; 		  ("<backtab>" . corfu-previous)
+  ;; 		  ("RET" . corfu-insert)
+  ;; 		  )
+  (:map corfu-popupinfo-map
+		("C-<tab>" . completion-at-point)
+		("M-n" . corfu-popupinfo-scroll-up)
+		("M-p" . corfu-popupinfo-scroll-down))
+  )
+
+;; Enable Emacs built-in completion cycling and TAB behavior
+(setq tab-always-indent 'complete)  ; TAB tries completion first, then indents
+(setq completion-cycle-threshold 3) ; Cycle if 3 or fewer candidates
+
+;; -------------------------------------------------------------------
+;; Tempel
+;; -------------------------------------------------------------------
+
+;; NOTE: I'm using this because Jesse Hildebrandt does. I was
+;; considering using Yasnippets, but it doesn't seem to mesh well with
+;; corfu by default and I'm still not familiar with hooks and
+;; functions in Elisp, or I would write my own customizations. For
+;; now, sticking with tempel. Either way, I'm writing my own
+;; System Verilog snippets/templates.
+;;
+;; Additionally, I'm taking my configuration of Tempel from the Tempel
+;; repository for now. Dont' want to have to decipher everything that
+;; Jesse did.
+
+;; Configure Tempel
+(use-package tempel
+  :ensure t
+  ;; Require trigger prefix before template name when completing.
+  :custom
+  (tempel-path (concat "templates/" "*.eld"))
+  ;; (tempel-trigger-prefix "<")
+
+  :bind (("M-+" . tempel-complete) ;; Alternative tempel-expand
+         ("M-*" . tempel-insert))
+  (:map tempel-map
+        ("RET" . tempel-done)
+        ("<tab>" . tempel-next)
+        ("<backtab>" . tempel-previous)
+        ("C-g" . tempel-abort))
+
+
+  :preface
+  (defun user/tempel-setup-capf ()
+    "Add `tempel-complete' to `completion-at-point-functions' (buffer-local).
+If `tempel-complete' is already a member of `completion-at-point-functions', it
+is promoted to the beginning of the list of hooked functions."
+    (setq-local completion-at-point-functions (cons #'tempel-complete (remove #'tempel-complete completion-at-point-functions))))
+
+
+  ;; :init
+  ;; Setup completion at point
+  ;; (defun tempel-setup-capf ()
+  ;;   ;; Add the Tempel Capf to `completion-at-point-functions'.
+  ;;   ;; `tempel-expand' only triggers on exact matches. Alternatively use
+  ;;   ;; `tempel-complete' if you want to see all matches, but then you
+  ;;   ;; should also configure `tempel-trigger-prefix', such that Tempel
+  ;;   ;; does not trigger too often when you don't expect it. NOTE: We add
+  ;;   ;; `tempel-expand' *before* the main programming mode Capf, such
+  ;;   ;; that it will be tried first.
+  ;;   (setq-local completion-at-point-functions
+  ;;               (cons #'tempel-expand
+  ;;                     completion-at-point-functions)))
+
+  :hook
+  (prog-mode-hook . user/tempel-setup-capf)
+  (text-mode-hook . user/tempel-setup-capf)
+  (eglot-managed-mode-hook . user/tempel-setup-capf)
+  
+  ;; (add-hook 'conf-mode-hook 'tempel-setup-capf)
+  ;; (add-hook 'prog-mode-hook 'tempel-setup-capf)
+  ;; (add-hook 'text-mode-hook 'tempel-setup-capf)
+
+  ;; Optionally make the Tempel templates available to Abbrev,
+  ;; either locally or globally. `expand-abbrev' is bound to C-x '.
+  ;; (add-hook 'prog-mode-hook #'tempel-abbrev-mode)
+  ;; (global-tempel-abbrev-mode)
+)
+
+;; Optional: Add tempel-collection.
+;; The package is young and doesn't have comprehensive coverage.
+(use-package tempel-collection
+  :ensure t)
+
+;; FIXME: So much hooking to get verilog-ts-mode to see the
+;; templates. There has to be a concise way to do this. Regardless,
+;; this adds tempel-complete to the verilog-buffer's
+;; completion-at-point-functions alist, otherwise, verilog-mode
+;; overwrites it completely with only it's two functions. Verilog-mode
+;; does not seem to want to get along with other plugins.
+(add-hook `verilog-ts-mode-hook
+			 (lambda ()
+				(setq-local completion-at-point-functions (cons #'tempel-complete (remove #'tempel-complete completion-at-point-functions)))))
+
+;; (debug-on-entry 'tempel-next)  ; Log Tempel actions to *Messages*
 
 ;; -------------------------------------------------------------------
 ;; Load Deus Ex: Human Revolution theme
