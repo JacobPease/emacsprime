@@ -1,8 +1,17 @@
 verilog-mode verilog-ts-mode
 
+(if "if (" p ") begin" n> q n "end">)
+
+(case "case (" p ")" n> "default: " q ";" n> "endcase">)
+
 (module "module " (s "name") ";" n> q n "endmodule">)
 
-(ff "always_ff @(" p ") begin" n> q n> "end">)
+;; Behavioral blocks
+(begin "begin" n> q n "end">)
+
+(always "always @(" p ") begin" n> q n "end">)
+
+(always_ff "always_ff @(" p ") begin" n> q n> "end">)
 
 (comb "always_comb begin" n> q n> "end">)
 
@@ -10,6 +19,7 @@ verilog-mode verilog-ts-mode
 
 (assign "assign " p " = " q ";")
 
+;; System Verilog features
 (class "class " p ";" n> q n "endclass">)
 
 (task "task " p "(" p ");" n> q n "endtask">)
@@ -19,9 +29,5 @@ verilog-mode verilog-ts-mode
 (generate "generate " n> q n> "endgenerate">)
 
 (package "package " p ";" n> q n> "endpackage">)
-
-(case "case (" p ")" n> "default: " q ";" n> "endcase">)
-
-(begin "begin" n> q n "end">)
 
 ;; (assert "assert (" p ") begin" n> "$display(\"" p "\");" n "end else begin" >n> q n "end">)
