@@ -10,3 +10,17 @@ Many parts of this configuration have been borrowed from Jessie Hildebrandt's do
 The theme also borrows elements of Jessie Hildebrandt's Adwaita Dark theme: https://gitlab.com/jessieh/adwaita-dark-theme
 
 This configuration will likely change signifcantly as I learn more about Emacs and my preferences change.
+
+# Tree Sitter
+Tree sitter support is required in order to use this configuration. A recent version of Emacs beyond version 29.
+
+# Verilog Support
+Many things about writing in System Verilog have been optimized in this configuration. Below the changes are described.
+
+## Formatting and Indentation
+
+
+## Tempel
+In order to get the System Verilog templates to work in `verilog-mode` and `verilog-ts-mode`, a couple of things had to be changed. These changes may be able to worked into the official verilog-ts-mode repository someday, but for now I'll describe them here.
+
+Indentation inside templates will not work in `verilog-ts-mode` by default. In order to get it working, the indentation function of `verilog-mode` needs to be set to 
