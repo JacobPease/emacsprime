@@ -38,6 +38,9 @@
 ;; Enable truncation of lines instead of word wrapping for programming modes
 (add-hook 'prog-mode-hook (lambda () (setq truncate-lines t)))
 
+;; Electric pair mode enabled in prog modes
+(add-hook 'prog-mode-hook (lambda () (electric-pair-local-mode)))
+
 ;; Install all-the-icons for professional looking icons
 (unless (package-installed-p 'all-the-icons)
   (package-install 'all-the-icons)
@@ -548,8 +551,9 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
 (use-package tempel
   :ensure t
   ;; Require trigger prefix before template name when completing.
-  :custom
-  (tempel-path (concat "templates/" "*.eld"))
+  :config
+  ;;(tempel-path (concat "templates/" "*.eld"))
+  (setq tempel-path (locate-user-emacs-file "templates/*.eld"))
   ;; (tempel-trigger-prefix "<")
 
   :bind (("M-+" . tempel-complete) ;; Alternative tempel-expand
