@@ -550,10 +550,18 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
 ;; Configure Tempel
 (use-package tempel
   :ensure t
-  ;; Require trigger prefix before template name when completing.
+  :init
+  ;; Define a wrapper function that disables expansion in comments/strings
+  (defun my/tempel-complete-maybe ()
+    "Expand Tempel template if not in a comment or string."
+    (interactive)
+    (unless (or (nth 4 (syntax-ppss))  ; In comment
+                (nth 3 (syntax-ppss)))  ; In string
+      (tempel-complete)))
   :config
   ;;(tempel-path (concat "templates/" "*.eld"))
   (setq tempel-path (locate-user-emacs-file "templates/*.eld"))
+  ;; Require trigger prefix before template name when completing.
   ;; (tempel-trigger-prefix "<")
 
   :bind (("M-+" . tempel-complete) ;; Alternative tempel-expand
@@ -570,7 +578,7 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
     "Add `tempel-complete' to `completion-at-point-functions' (buffer-local).
 If `tempel-complete' is already a member of `completion-at-point-functions', it
 is promoted to the beginning of the list of hooked functions."
-    (setq-local completion-at-point-functions (cons #'tempel-complete (remove #'tempel-complete completion-at-point-functions))))
+    (setq-local completion-at-point-functions (cons #'my/tempel-complete-maybe (remove #'tempel-complete completion-at-point-functions))))
 
 
   ;; :init
@@ -615,7 +623,7 @@ is promoted to the beginning of the list of hooked functions."
 ;; does not seem to want to get along with other plugins.
 (add-hook `verilog-ts-mode-hook
 			 (lambda ()
-				(setq-local completion-at-point-functions (cons #'tempel-complete (remove #'tempel-complete completion-at-point-functions)))))
+				(setq-local completion-at-point-functions (cons #'my/tempel-complete-maybe (remove #'tempel-complete completion-at-point-functions)))))
 
 ;; (debug-on-entry 'tempel-next)  ; Log Tempel actions to *Messages*
 
