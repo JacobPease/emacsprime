@@ -278,7 +278,10 @@
    ;; all-the-icons
    ;; `(all-the-icons-octicon ((,class (:foreground ,yellow))))
    `(all-the-icons-dir-face ((,class (:foreground ,yellow))))
-   
+
+	;; riscv
+	`(riscv-labels ((,class (:foreground ,yellow :weight bold))))
+	`(riscv-instructions ((,class (:foreground ,fg-bold :weight normal))))
    ))
 
 ;; Set fringe width and mode line padding

@@ -217,7 +217,7 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
 ;; -------------------------------------------------------------------
 
 ;; Define a custom variable for Verilog indentation
-(defcustom my-verilog-indent-level 3
+(defcustom my-verilog-indent-level 2
   "Indentation level for Verilog and SystemVerilog modes."
   :type 'integer
   :group 'verilog-mode
@@ -232,6 +232,7 @@ Exempt major modes are defined in `display-line-numbers-exempt-modes'."
                        (setq verilog-indent-level-declaration my-verilog-indent-level)
                        (setq verilog-indent-level-module my-verilog-indent-level)
                        (setq verilog-indent-level-behavioral my-verilog-indent-level)
+							  (setq verilog-indent-lists nil) ; indentation for lists and ports
 							  (setq verilog-auto-endcomments nil)
                        (setq indent-tabs-mode nil)    ; Use spaces, not tabs
                        (setq tab-always-indent t)))   ; Ensure TAB reindents
@@ -626,6 +627,21 @@ is promoted to the beginning of the list of hooked functions."
 				(setq-local completion-at-point-functions (cons #'my/tempel-complete-maybe (remove #'tempel-complete completion-at-point-functions)))))
 
 ;; (debug-on-entry 'tempel-next)  ; Log Tempel actions to *Messages*
+
+;; -----------------------------------------------------------------------------
+;; Magit
+;; -----------------------------------------------------------------------------
+
+(use-package magit
+  :ensure t)
+
+;; -------------------------------------------------------------------
+;; riscv-mode
+;; -------------------------------------------------------------------
+
+(add-to-list 'load-path "~/repos/jacobpease/riscv-mode")
+(require 'riscv-mode)
+(add-to-list 'auto-mode-alist '("\\.s\\'" . riscv-mode))
 
 ;; -------------------------------------------------------------------
 ;; Load Deus Ex: Human Revolution theme
